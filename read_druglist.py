@@ -42,7 +42,7 @@ def get_border_color(account_id):
 st.set_page_config(page_title="Drug Finder", page_icon="💊", layout="centered")
 
 # โหลดข้อมูล
-df = pd.read_excel("druglist.xlsx")
+df = pd.read_excel("drruglist.xlsx")
 # แก้ปัญหา _x000d_ โดยลบออกจากทุก column ที่เป็นข้อความ
 df = df.applymap(lambda x: x.replace('_x000d_', ' ') if isinstance(x, str) else x)
 # หัวเรื่อง
