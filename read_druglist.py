@@ -32,9 +32,9 @@ def get_border_color(account_id):
         "ข": "#4ade80",
         "ค": "#facc15",
         "ง": "#fb923c",
-        "จ1": "#f472b6",
+        "จ(1)": "#f472b6",
         "นอกบัญชี": "#a3a3a3",
-        "จ2": "#7a3a1d",
+        "จ(2)": "#7a3a1d",
     }
     return color_map.get(account_id, "#d1c4e9")
 
