@@ -32,9 +32,9 @@ def get_border_color(account_id):
         "ข": "#4ade80",
         "ค": "#facc15",
         "ง": "#fb923c",
-        "จ": "#f472b6",
+        "จ1": "#f472b6",
         "นอกบัญชี": "#a3a3a3",
-        "บัญชียาจากสมุนไพร": "#7a3a1d",
+        "จ2": "#7a3a1d",
     }
     return color_map.get(account_id, "#d1c4e9")
 
@@ -46,7 +46,7 @@ df = pd.read_excel("drruglist.xlsx")
 # แก้ปัญหา _x000d_ โดยลบออกจากทุก column ที่เป็นข้อความ
 df = df.applymap(lambda x: x.replace('_x000d_', ' ') if isinstance(x, str) else x)
 # หัวเรื่อง
-st.markdown('<h3 style="margin-bottom: 0; color: #6A1B9A;">💊 บัญชียา รพ.ท้ายเหมืองชัยพัฒน์ ปีงบ 2568</h3>', unsafe_allow_html=True)
+st.markdown('<h3 style="margin-bottom: 0; color: #006ebc;">📖 บัญชียาหลักแห่งชาติ edit ฉ.67 (2)</h3>', unsafe_allow_html=True)
 # CSS รองรับ dark mode
 st.markdown("""
 <style>
