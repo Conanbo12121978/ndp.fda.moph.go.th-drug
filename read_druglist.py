@@ -160,6 +160,8 @@ if sort_mode == "เรียงตามชื่อยา":
             entries = df[df["drug_name"] == drug]
             if len(entries) == 1:
                 row = entries.iloc[0]
+                dosage = row.get("dosage", "-")
+                dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                 color = get_border_color(row['account_drug_ID'])
                 group_parts = [
                     str(row.get("subtype1_name", "")).strip(),
@@ -171,7 +173,7 @@ if sort_mode == "เรียงตามชื่อยา":
                 st.markdown(f"""
                 <div class="drug-card" style="border-left: 6px solid {color};">
                     <strong>{row['drug_name']}</strong><br>
-                    <div style="color: #888;">{row.get('dosage', '')}</div>
+                    <div style="margin-left: 22px; color: #888;">{dosage}</div><br>
                     <span style="color: #888;">[บัญชี: {row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else ''}]</span><br>
                     <span style="color: #888;">กลุ่ม: {group_info if group_info else 'ไม่ระบุ'}</span>
                 </div>
