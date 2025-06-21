@@ -173,7 +173,7 @@ if sort_mode == "เรียงตามชื่อยา":
                 st.markdown(f"""
                 <div class="drug-card" style="border-left: 6px solid {color};">
                     <strong>{row['drug_name']}</strong><br>
-                    <div style="margin-left: 22px; color: #888;">{dosage}</div><br>
+                    <div style="color: #888;">{dosage}</div>
                     <span style="color: #888;">[บัญชี: {row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else ''}]</span><br>
                     <span style="color: #888;">กลุ่ม: {group_info if group_info else 'ไม่ระบุ'}</span>
                 </div>
@@ -191,7 +191,9 @@ if sort_mode == "เรียงตามชื่อยา":
                         group_info = " > ".join([g for g in group_parts if g and g.lower() != "nan"])
                         st.markdown(f"""
                         <div class="drug-card" style="border-left: 6px solid {color};">
-                            <strong>{row['drug_name']}</strong><br> <span style="color: #888;">[บัญชี: {row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else ''}]</span><br>
+                            <strong>{row['drug_name']}</strong><br> 
+                            <div style="color: #888;">{dosage}</div>
+                            <span style="color: #888;">[บัญชี: {row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else ''}]</span><br>
                             <span style="color: #888;">กลุ่ม: {group_info if group_info else 'ไม่ระบุ'}</span>
                         </div>
                         """, unsafe_allow_html=True)
