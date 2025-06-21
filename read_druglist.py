@@ -181,6 +181,8 @@ if sort_mode == "เรียงตามชื่อยา":
             else:
                 with st.expander(f"💊 {drug} ({len(entries)} กลุ่มยา)"):
                     for _, row in entries.iterrows():
+                        dosage = row.get("dosage", "-")
+                        dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                         color = get_border_color(row['account_drug_ID'])
                         group_parts = [
                             str(row.get("subtype1_name", "")).strip(),
