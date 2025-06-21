@@ -242,6 +242,8 @@ else:
                     for _, row in group4.iterrows():
                         color = get_border_color(row['account_drug_ID'])
                         drug_name = row['drug_name']
+                        dosage = row.get("dosage", "-")
+                        dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                         account = row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else "-"
                         group_parts = [
                             str(row.get("subtype1_name", "")).strip(),
@@ -253,7 +255,7 @@ else:
                         st.markdown(f"""
                        <div class="drug-card" style="border-left: 6px solid {color}; margin-left: 20px;">
                            💊 <strong>{drug_name}</strong><br>
-                           <div style="margin-left: 22px; color: #888;">{row.get('dosage', '')}</div>
+                           <div style="margin-left: 22px; color: #888;">{dosage}</div>
                            <span style="margin-left: 22px; color: #888;">บัญชี: {account}</span>
                            </div>
                            """, unsafe_allow_html=True)
