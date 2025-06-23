@@ -246,33 +246,33 @@ else:
                         dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                         account = row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else "-"
                         advice = row.get("advice", "")
-condition = row.get("condition", "")
-warning = row.get("warning", "")
-note = row.get("note", "")
+                        condition = row.get("condition", "")
+                        warning = row.get("warning", "")
+                        note = row.get("note", "")
 
-# ตรวจสอบว่ามีอย่างน้อย 1 ช่องที่ไม่ว่าง และไม่ใช่ "nan"
-has_details = any([
-    pd.notna(advice) and str(advice).strip() != "",
-    pd.notna(condition) and str(condition).strip() != "",
-    pd.notna(warning) and str(warning).strip() != "",
-    pd.notna(note) and str(note).strip() != ""
-])
+                        # ตรวจสอบว่ามีอย่างน้อย 1 ช่องที่ไม่ว่าง และไม่ใช่ "nan"
+                        has_details = any([
+                            pd.notna(advice) and str(advice).strip() != "",
+                            pd.notna(condition) and str(condition).strip() != "",
+                            pd.notna(warning) and str(warning).strip() != "",
+                            pd.notna(note) and str(note).strip() != ""
+                        ])
 
-details_html = ""
-if has_details:
-    details_html += "<details style='margin-left: 22px; margin-top: 6px;'>"
-    details_html += "<summary style='cursor: pointer; color: #2563eb;'>📌 รายละเอียดเพิ่มเติม</summary><div style='padding-left:10px;'>"
+                        details_html = ""
+                        if has_details:
+                            details_html += "<details style='margin-left: 22px; margin-top: 6px;'>"
+                            details_html += "<summary style='cursor: pointer; color: #2563eb;'>📌 รายละเอียดเพิ่มเติม</summary><div style='padding-left:10px;'>"
 
-    if pd.notna(advice) and str(advice).strip() != "":
-        details_html += f"<div style='color:#1e40af;'><b>คำแนะนำ:</b> {advice}</div>"
-    if pd.notna(condition) and str(condition).strip() != "":
-        details_html += f"<div style='color:#047857;'><b>เงื่อนไข:</b> {condition}</div>"
-    if pd.notna(warning) and str(warning).strip() != "":
-        details_html += f"<div style='color:#b91c1c;'><b>คำเตือนและข้อควรระวัง:</b> {warning}</div>"
-    if pd.notna(note) and str(note).strip() != "":
-        details_html += f"<div style='color:#6b21a8;'><b>หมายเหตุ:</b> {note}</div>"
+                            if pd.notna(advice) and str(advice).strip() != "":
+                                details_html += f"<div style='color:#1e40af;'><b>คำแนะนำ:</b> {advice}</div>"
+                            if pd.notna(condition) and str(condition).strip() != "":
+                               details_html += f"<div style='color:#047857;'><b>เงื่อนไข:</b> {condition}</div>"
+                            if pd.notna(warning) and str(warning).strip() != "":
+                               details_html += f"<div style='color:#b91c1c;'><b>คำเตือนและข้อควรระวัง:</b> {warning}</div>"
+                            if pd.notna(note) and str(note).strip() != "":
+                               details_html += f"<div style='color:#6b21a8;'><b>หมายเหตุ:</b> {note}</div>"
 
-    details_html += "</div></details>"
+                            details_html += "</div></details>"
                    
                     
 
