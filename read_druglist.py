@@ -289,8 +289,8 @@ else:
                            <div style="margin-left: 22px; color: #888;">{dosage}</div>
                            <span style="margin-left: 22px; color: #888;">บัญชี: {account}</span><br>
                            {details_html}
-                           </div>
-                           """, unsafe_allow_html=True)
+                       </div>
+                       """, unsafe_allow_html=True)
 
 # ปุ่มดาวน์โหลด Excel (ด้านล่าง)
 st.markdown(to_excel_download(df), unsafe_allow_html=True)
