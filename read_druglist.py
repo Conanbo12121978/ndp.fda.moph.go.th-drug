@@ -278,7 +278,8 @@ else:
                        <div class="drug-card" style="border-left: 6px solid {color}; margin-left: 20px;">
                            💊 <strong>{drug_name}</strong><br>
                            <div style="margin-left: 22px; color: #888;">{dosage}</div>
-                           <span style="margin-left: 22px; color: #888;">บัญชี: {account}</span>
+                           <span style="margin-left: 22px; color: #888;">บัญชี: {account}</span><br>
+                           {details_html}
                            </div>
                            """, unsafe_allow_html=True)
 
