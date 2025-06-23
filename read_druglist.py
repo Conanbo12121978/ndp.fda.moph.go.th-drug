@@ -116,6 +116,7 @@ st.markdown("""
 if st.button("🔄 เคลียร์ตัวกรองทั้งหมด"):
     st.session_state["subtype1_filter"] = "--ทั้งหมด--"
     st.session_state["subtype2_filter"] = "--ทั้งหมด--"
+    st.session_state["subtype3_filter"] = "--ทั้งหมด--"
     st.session_state["account_filter"] = "--ทั้งหมด--"
     st.session_state["search_text"] = ""
     st.session_state["sort_mode"] = "เรียงตามชื่อยา"
@@ -123,7 +124,7 @@ if st.button("🔄 เคลียร์ตัวกรองทั้งหม�
 # ตัวเลือกการเรียง
 sort_mode = st.radio("🧭 เรียงข้อมูลโดย", ["เรียงตามชื่อยา", "เรียงตามกลุ่มยา"], key="sort_mode", horizontal=True)
 
-# ตัวกรอง subtype1, subtype2, account, search
+# ตัวกรอง subtype1, subtype2, subtype3, account, search
 subtype1_list = df["subtype1_name"].dropna().unique()
 selected_subtype1 = st.selectbox("เลือกประเภทหลัก", ["--ทั้งหมด--"] + sorted(subtype1_list), key="subtype1_filter")
 if selected_subtype1 != "--ทั้งหมด--":
@@ -133,6 +134,11 @@ subtype2_list = df["subtype2_name"].dropna().unique()
 selected_subtype2 = st.selectbox("เลือกประเภทรอง", ["--ทั้งหมด--"] + sorted(subtype2_list), key="subtype2_filter")
 if selected_subtype2 != "--ทั้งหมด--":
     df = df[df["subtype2_name"] == selected_subtype2]
+
+subtype3_list = df["subtype3_name"].dropna().unique()
+selected_subtype3 = st.selectbox("เลือกประเภทย่อย", ["--ทั้งหมด--"] + sorted(subtype3_list), key="subtype3_filter")
+if selected_subtype3 != "--ทั้งหมด--":
+    df = df[df["subtype3_name"] == selected_subtype3]
 
 account_list = df["account_drug_ID"].dropna().unique()
 selected_account = st.selectbox("เลือกบัญชียา", ["--ทั้งหมด--"] + sorted(account_list), key="account_filter")
@@ -147,7 +153,7 @@ if search_text.strip():
 st.markdown(to_excel_download(df), unsafe_allow_html=True)
 
 # Caption แสดงเงื่อนไข
-st.caption(f"🎯 ตัวกรอง: {selected_subtype1} > {selected_subtype2} > {selected_account} | ค้นหา: {search_text if search_text else '-'}")
+st.caption(f"🎯 ตัวกรอง: {selected_subtype1} > {selected_subtype2} > {selected_subtype3} > {selected_account} | ค้นหา: {search_text if search_text else '-'}")
 
 # ถ้าเรียงตามชื่อยา: ใช้โค้ดเดิม
 if sort_mode == "เรียงตามชื่อยา":
