@@ -42,7 +42,7 @@ def get_border_color(account_id):
 st.set_page_config(page_title="Drug Finder", page_icon="💊", layout="centered")
 
 # โหลดข้อมูล
-df = pd.read_excel("drruglist.xlsx")
+df = pd.read_excel("druglist.xlsx")
 # แก้ปัญหา _x000d_ โดยลบออกจากทุก column ที่เป็นข้อความ
 df = df.applymap(lambda x: x.replace('_x000d_', ' ') if isinstance(x, str) else x)
 # หัวเรื่อง
@@ -245,6 +245,28 @@ else:
                         dosage = row.get("dosage", "-")
                         dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                         account = row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else "-"
+                        advice = row.get("advice", "")
+                        condition = row.get("condition", "")
+                        warning = row.get("warning", "")
+                        note = row.get("note", "")
+
+                        details_html = ""
+                        if any([advice, condition, warning, note]):
+                            details_html += "<details style='margin-left: 22px; margin-top: 6px;'>"
+                            details_html += "<summary style='cursor: pointer; color: #2563eb;'>📌 รายละเอียดเพิ่มเติม</summary><div style='padding-left:10px;'>"
+
+                            if advice and str(advice).strip().lower() != "nan":
+                                details_html += f"<div style='color:#1e40af;'><b>🔹คำแนะนำ:</b> {advice}</div>"
+                            if condition and str(condition).strip().lower() != "nan":
+                                details_html += f"<div style='color:#047857;'><b>🔸เงื่อนไข:</b> {condition}</div>"
+                            if warning and str(warning).strip().lower() != "nan":
+                                details_html += f"<div style='color:#b91c1c;'><b>⚠️คำเตือน:</b> {warning}</div>"
+                            if note and str(note).strip().lower() != "nan":
+                                details_html += f"<div style='color:#6b21a8;'><b>📝หมายเหตุ:</b> {note}</div>"
+
+                            details_html += "</div></details>"
+                    
+
                         group_parts = [
                             str(row.get("subtype1_name", "")).strip(),
                             str(row.get("subtype2_name", "")).strip(),
