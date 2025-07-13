@@ -251,14 +251,14 @@ else:
                         dosage = row.get("dosage", "-")
                         dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                         account = row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else "-"
-                        drug_type = row.get("ประเภทยา", "")
+                        
                         advice = row.get("advice", "")
                         condition = row.get("condition", "")
                         warning = row.get("warning", "")
                         note = row.get("note", "")
 
-                        # สร้าง HTML แสดงประเภทยา ถ้ามี
-                        drug_type_html = f"<span style='margin-left: 22px; color: #888;'>ประเภทยา: {drug_type}</span><br>" if pd.notna(drug_type) and str(drug_type).strip() != "" else ""
+                        drug_type = row.get("ประเภทยา", "")
+                        drug_type_html = f"<span style='color: #888;'>ประเภทยา: {drug_type}</span><br>" if pd.notna(drug_type) and str(drug_type).strip() != "" else ""
 
                         # ตรวจสอบว่ามีอย่างน้อย 1 ช่องที่ไม่ว่าง และไม่ใช่ "nan"
                         has_details = any([
