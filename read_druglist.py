@@ -221,7 +221,7 @@ else:
     }
     df["account_order"] = df["account_drug_ID"].map(account_order_map).fillna(99)
     df = df[df["drug_name"].notna() & (df["drug_name"].str.strip() != "")]
-    df["account_order"] = df["account_drug_ID"].fillna("")
+    
     # ✨ แก้ตรงนี้
     df["drug_name_lower"] = df["drug_name"].str.lower()
     df = df.sort_values(by=["subtype1_name", "subtype2_name", "subtype3_name", "account_order", "drug_name_lower"])
