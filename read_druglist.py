@@ -251,6 +251,8 @@ else:
                         dosage = row.get("dosage", "-")
                         dosage = dosage if pd.notna(dosage) and str(dosage).strip() != "" else "-"
                         account = row['account_drug_ID'] if pd.notna(row['account_drug_ID']) else "-"
+                        type = row.get ("ประเภทยา","-") 
+                        type = type if pd.notna(type) and str(type).strip() != "" else "-"
                         advice = row.get("advice", "")
                         condition = row.get("condition", "")
                         warning = row.get("warning", "")
@@ -294,6 +296,7 @@ else:
                            💊 <strong>{drug_name}</strong><br>
                            <div style="margin-left: 22px; color: #888;">{dosage}</div>
                            <span style="margin-left: 22px; color: #888;">บัญชี: {account}</span><br>
+                           <span style="margin-left: 22px; color: #888;">ประเภทยา: {type}</span><br>
                            {details_html}
                        </div>
                        """, unsafe_allow_html=True)
