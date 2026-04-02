@@ -52,7 +52,10 @@ st.set_page_config(page_title="Drug Finder", page_icon="💊")
 st.markdown("## 💊 บัญชียาหลักแห่งชาติ")
 
 if st.button("🔄 เคลียร์"):
-    st.session_state.clear()
+    for key in ["subtype1","subtype2","subtype3","account","sub_account","search"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.rerun()
 
 # ========== FILTER ==========
 col1, col2 = st.columns(2)
@@ -130,9 +133,9 @@ else:
         st.markdown(f"""
         <div style="padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
             💊 <b>{drug}</b><br>
-            ขนาดยา: {dosage}<br>
+            รูปแบบ: {dosage}<br>
             บัญชี: {acc}<br>
-            บัญชีย่อย: {sub}<br>
+            บัญชีใหม่: {sub}<br>
             ประเภทยา: {drug_type}<br>
             {details}
         </div>
