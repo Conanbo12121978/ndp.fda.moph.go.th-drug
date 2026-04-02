@@ -53,7 +53,7 @@ def to_excel_download(df):
 
 # ========== UI ==========
 st.set_page_config(page_title="Drug Finder", page_icon="💊")
-st.markdown("## 💊 บัญชียาหลักแห่งชาติ")
+st.markdown("## 💊 บัญชียาหลักแห่งชาติ 2569")
 
 # ========== CLEAR ==========
 if st.button("🔄 เคลียร์ทั้งหมด"):
@@ -156,9 +156,9 @@ else:
         st.markdown(f"""
         <div style="padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
             <b>{i+1}. {row['drug_name']}</b><br>
-            ขนาดยา: {row.get('dosage','-')}<br>
+            รูปแบบ: {row.get('dosage','-')}<br>
             บัญชี: {row.get('account_drug_ID','-')}<br>
-            บัญชีย่อย: {row.get('account_sub','-')}<br>
+            บัญชีใหม่: {row.get('account_sub','-')}<br>
             ประเภทยา: {row.get('drug_type','-')}<br>
             เงื่อนไข: {row.get('condition','-')}<br>
             คำเตือน: {row.get('warning','-')}<br>
