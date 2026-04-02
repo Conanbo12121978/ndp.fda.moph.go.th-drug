@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 import base64
 
-# ========== CACHE LOAD ==========
+# ========== CACHE ==========
 @st.cache_data
 def load_data():
     df = pd.read_excel("media.xlsx")
@@ -72,7 +72,6 @@ def get_sub_color(sub):
 st.set_page_config(page_title="Drug Finder", page_icon="💊")
 st.markdown("## 💊 บัญชียาหลักแห่งชาติ")
 
-# clear
 if st.button("🔄 เคลียร์"):
     st.session_state.clear()
 
@@ -90,7 +89,7 @@ sub_account = st.selectbox("บัญชีย่อย", ["--ทั้งหม
 
 search = st.text_input("🔍 ค้นหาชื่อยา")
 
-# apply filter
+# filter
 df_filtered = df.copy()
 
 if subtype1 != "--ทั้งหมด--":
@@ -110,20 +109,21 @@ if search:
 st.markdown(to_excel_download(df_filtered), unsafe_allow_html=True)
 
 # ========== VIEW MODE ==========
-view_mode = st.radio("โหมดแสดงผล", ["⚡ เร็ว (ตาราง)", "🎨 สวย (การ์ด)"])
+view_mode = st.radio("โหมดแสดง", ["⚡ เร็ว (ตาราง)", "🎨 สวย (การ์ด)"])
 
 st.subheader(f"📋 พบ {len(df_filtered)} รายการ")
 
-# ========== FAST MODE ==========
+# ========== FAST ==========
 if view_mode == "⚡ เร็ว (ตาราง)":
     st.dataframe(df_filtered, use_container_width=True)
 
-# ========== CARD MODE ==========
+# ========== CARD ==========
 else:
-    MAX_ROWS = 150
+    MAX_ROWS = 80
     df_show = df_filtered.head(MAX_ROWS)
 
-    st.caption(f"แสดง {len(df_show)} / {len(df_filtered)} รายการ (ป้องกันค้างมือถือ)")
+    if len(df_filtered) > MAX_ROWS:
+        st.warning("⚠️ แสดงเฉพาะ 80 รายการแรก (ป้องกันมือถือค้าง)")
 
     for _, row in df_show.iterrows():
 
@@ -142,25 +142,28 @@ else:
         note = row.get("note", "")
 
         details = ""
-        if any([advice, condition, warning, note]):
-            details += "<details><summary>📌 รายละเอียด</summary>"
-            if advice: details += f"<div>คำแนะนำ: {advice}</div>"
-            if condition: details += f"<div>เงื่อนไข: {condition}</div>"
-            if warning: details += f"<div>คำเตือน: {warning}</div>"
-            if note: details += f"<div>หมายเหตุ: {note}</div>"
-            details += "</details>"
+        if advice:
+            details += f"<span style='color:#2563eb;'>คำแนะนำ: {advice}</span><br>"
+        if condition:
+            details += f"<span style='color:#16a34a;'>เงื่อนไข: {condition}</span><br>"
+        if warning:
+            details += f"<span style='color:#dc2626;'>คำเตือน: {warning}</span><br>"
+        if note:
+            details += f"<span style='color:#7c3aed;'>หมายเหตุ: {note}</span><br>"
 
         st.markdown(f"""
         <div style="border-left:6px solid {color}; padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
             💊 <b>{drug}</b><br>
             <span style="color:#666;">{dosage}</span><br>
+
             <span style="color:#888;">บัญชี: {acc}</span><br>
 
             <span style="background:{sub_color};color:white;padding:2px 6px;border-radius:4px;">
             {sub}
             </span><br>
 
-            <span style="color:#888;">ประเภท: {drug_type}</span>
+            <span style="color:#888;">ประเภท: {drug_type}</span><br>
+
             {details}
         </div>
         """, unsafe_allow_html=True)
