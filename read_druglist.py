@@ -35,9 +35,13 @@ df = load_data()
 
 # ========== DOWNLOAD ==========
 def to_excel_download(df):
+    df_export = df.copy().fillna("-")
+    df_export.insert(0, "ลำดับ", range(1, len(df_export) + 1))
+
     output = BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False)
+        df_export.to_excel(writer, index=False)
+
     b64 = base64.b64encode(output.getvalue()).decode()
     return f"""
     <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" 
@@ -51,16 +55,14 @@ def to_excel_download(df):
 st.set_page_config(page_title="Drug Finder", page_icon="💊")
 st.markdown("## 💊 บัญชียาหลักแห่งชาติ")
 
-# ========== CLEAR BUTTON ==========
+# ========== CLEAR ==========
 if st.button("🔄 เคลียร์ทั้งหมด"):
-
     st.session_state["subtype1"] = "--ทั้งหมด--"
     st.session_state["subtype2"] = "--ทั้งหมด--"
     st.session_state["subtype3"] = "--ทั้งหมด--"
     st.session_state["account"] = "--ทั้งหมด--"
     st.session_state["sub_account"] = "--ทั้งหมด--"
     st.session_state["search"] = ""
-
     st.rerun()
 
 # ========== FILTER ==========
@@ -136,47 +138,31 @@ st.subheader(f"📋 พบ {len(df_filtered)} รายการ")
 
 # ===== TABLE =====
 if view_mode == "⚡ ตาราง":
-    st.dataframe(df_filtered, use_container_width=True)
+
+    df_show = df_filtered.copy().fillna("-")
+    df_show.insert(0, "ลำดับ", range(1, len(df_show) + 1))
+
+    st.dataframe(df_show, use_container_width=True, hide_index=True)
 
 # ===== BOX =====
 else:
-    MAX_ROWS = 80
-    df_show = df_filtered.head(MAX_ROWS)
+    df_show = df_filtered.head(80).fillna("-")
 
-    if len(df_filtered) > MAX_ROWS:
+    if len(df_filtered) > 80:
         st.warning("⚠️ แสดงเฉพาะ 80 รายการแรก")
 
-    for _, row in df_show.iterrows():
-
-        drug = row.get("drug_name", "-")
-        dosage = row.get("dosage", "-")
-        acc = row.get("account_drug_ID", "-")
-        sub = row.get("account_sub", "-")
-        drug_type = row.get("drug_type", "-")
-
-        advice = row.get("advice", "")
-        condition = row.get("condition", "")
-        warning = row.get("warning", "")
-        note = row.get("note", "")
-
-        details = ""
-        if advice:
-            details += f"คำแนะนำ: {advice}<br>"
-        if condition:
-            details += f"เงื่อนไข: {condition}<br>"
-        if warning:
-            details += f"คำเตือน: {warning}<br>"
-        if note:
-            details += f"หมายเหตุ: {note}<br>"
+    for i, row in df_show.iterrows():
 
         st.markdown(f"""
         <div style="padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
-            💊 <b>{drug}</b><br>
-            ขนาดยา: {dosage}<br>
-            บัญชี: {acc}<br>
-            บัญชีย่อย: {sub}<br>
-            ประเภทยา: {drug_type}<br>
-            {details}
+            <b>{i+1}. {row['drug_name']}</b><br>
+            ขนาดยา: {row.get('dosage','-')}<br>
+            บัญชี: {row.get('account_drug_ID','-')}<br>
+            บัญชีย่อย: {row.get('account_sub','-')}<br>
+            ประเภทยา: {row.get('drug_type','-')}<br>
+            เงื่อนไข: {row.get('condition','-')}<br>
+            คำเตือน: {row.get('warning','-')}<br>
+            หมายเหตุ: {row.get('note','-')}<br>
         </div>
         """, unsafe_allow_html=True)
 
