@@ -44,7 +44,7 @@ st.set_page_config(page_title="Drug Finder", page_icon="💊", layout="centered"
 # โหลดข้อมูล
 df = pd.read_excel("druglist.xlsx")
 # แก้ปัญหา _x000d_ โดยลบออกจากทุก column ที่เป็นข้อความ
-df = df.applymap(lambda x: x.replace('_x000d_', ' ') if isinstance(x, str) else x)
+df = df.replace('_x000d_', ' ', regex=True)
 # หัวเรื่อง
 st.markdown('<h3 style="margin-bottom: 0; color: #006ebc;">📖 บัญชียาหลักแห่งชาติ edit ฉ.67 (2)</h3>', unsafe_allow_html=True)
 # CSS รองรับ dark mode
