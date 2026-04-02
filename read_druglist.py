@@ -3,6 +3,36 @@ import pandas as pd
 from io import BytesIO
 import base64
 
+# ========== CACHE LOAD ==========
+@st.cache_data
+def load_data():
+    df = pd.read_excel("media.xlsx")
+
+    df = df.rename(columns={
+        "group_name": "subtype1_name",
+        "subgroup1_name": "subtype2_name",
+        "subgroup2_name": "subtype3_name",
+        "subgroup3_name": "subtype4_name",
+        "generic_name": "drug_name",
+        "บัญชียา": "account_drug_ID",
+        "บัญชีย่อย": "account_sub",
+        "ประเภทยา": "drug_type",
+        "เงื่อนไข": "condition",
+        "คำเตือน": "warning",
+        "หมายเหตุ": "note"
+    })
+
+    df.columns = df.columns.str.strip()
+    df = df.replace('_x000d_', ' ', regex=True)
+    df = df.replace('-', '')
+
+    df["account_drug_ID"] = df["account_drug_ID"].astype(str).str.strip()
+    df["account_sub"] = df.get("account_sub", "").astype(str).str.strip()
+
+    return df
+
+df = load_data()
+
 # ========== DOWNLOAD ==========
 def to_excel_download(df):
     output = BytesIO()
@@ -38,60 +68,15 @@ def get_sub_color(sub):
         "R2": "#a78bfa"
     }.get(str(sub).strip(), "#9ca3af")
 
-# ========== PAGE ==========
+# ========== UI ==========
 st.set_page_config(page_title="Drug Finder", page_icon="💊")
+st.markdown("## 💊 บัญชียาหลักแห่งชาติ")
 
-st.markdown("## 📖 บัญชียาหลักแห่งชาติ")
-
-# ========== LOAD ==========
-try:
-    df = pd.read_excel("media.xlsx")
-except:
-    st.error("❌ ไม่พบไฟล์ media.xlsx (ตรวจสอบว่า upload แล้ว)")
-    st.stop()
-
-# ========== RENAME ==========
-df = df.rename(columns={
-    "group_name": "subtype1_name",
-    "subgroup1_name": "subtype2_name",
-    "subgroup2_name": "subtype3_name",
-    "subgroup3_name": "subtype4_name",
-    "generic_name": "drug_name",
-    "บัญชียา": "account_drug_ID",
-    "บัญชีย่อย": "account_sub",
-    "ประเภทยา": "drug_type",
-    "เงื่อนไข": "condition",
-    "คำเตือน": "warning",
-    "หมายเหตุ": "note"
-})
-
-# ========== CLEAN ==========
-df.columns = df.columns.str.strip()
-df = df.replace('_x000d_', ' ', regex=True)
-df = df.replace('-', '')
-
-# กันพัง column
-if "drug_name" not in df.columns:
-    st.error("❌ ไม่มี column: drug_name")
-    st.write(df.columns)
-    st.stop()
-
-if "account_drug_ID" not in df.columns:
-    st.error("❌ ไม่มี column: account_drug_ID")
-    st.write(df.columns)
-    st.stop()
-
-# account_sub กันพัง
-if "account_sub" not in df.columns:
-    df["account_sub"] = ""
-
-df["account_drug_ID"] = df["account_drug_ID"].astype(str).str.strip()
-df["account_sub"] = df["account_sub"].astype(str).str.strip()
-
-# ========== FILTER ==========
-if st.button("🔄 เคลียร์ตัวกรอง"):
+# clear
+if st.button("🔄 เคลียร์"):
     st.session_state.clear()
 
+# ========== FILTER ==========
 col1, col2 = st.columns(2)
 
 with col1:
@@ -100,73 +85,86 @@ with col2:
     subtype2 = st.selectbox("ประเภทรอง", ["--ทั้งหมด--"] + sorted(df["subtype2_name"].dropna().unique()))
 
 subtype3 = st.selectbox("ประเภทย่อย", ["--ทั้งหมด--"] + sorted(df["subtype3_name"].dropna().unique()))
-account = st.selectbox("บัญชี", ["--ทั้งหมด--"] + sorted(df["account_drug_ID"].fillna("").unique()))
-sub_account = st.selectbox("บัญชีย่อย", ["--ทั้งหมด--"] + sorted(df["account_sub"].fillna("").unique()))
+account = st.selectbox("บัญชี", ["--ทั้งหมด--"] + sorted(df["account_drug_ID"].dropna().unique()))
+sub_account = st.selectbox("บัญชีย่อย", ["--ทั้งหมด--"] + sorted(df["account_sub"].dropna().unique()))
 
 search = st.text_input("🔍 ค้นหาชื่อยา")
 
 # apply filter
+df_filtered = df.copy()
+
 if subtype1 != "--ทั้งหมด--":
-    df = df[df["subtype1_name"] == subtype1]
+    df_filtered = df_filtered[df_filtered["subtype1_name"] == subtype1]
 if subtype2 != "--ทั้งหมด--":
-    df = df[df["subtype2_name"] == subtype2]
+    df_filtered = df_filtered[df_filtered["subtype2_name"] == subtype2]
 if subtype3 != "--ทั้งหมด--":
-    df = df[df["subtype3_name"] == subtype3]
+    df_filtered = df_filtered[df_filtered["subtype3_name"] == subtype3]
 if account != "--ทั้งหมด--":
-    df = df[df["account_drug_ID"] == account]
+    df_filtered = df_filtered[df_filtered["account_drug_ID"] == account]
 if sub_account != "--ทั้งหมด--":
-    df = df[df["account_sub"] == sub_account]
+    df_filtered = df_filtered[df_filtered["account_sub"] == sub_account]
 if search:
-    df = df[df["drug_name"].str.contains(search, case=False, na=False)]
+    df_filtered = df_filtered[df_filtered["drug_name"].str.contains(search, case=False, na=False)]
 
-# ========== DOWNLOAD ==========
-st.markdown(to_excel_download(df), unsafe_allow_html=True)
+# download
+st.markdown(to_excel_download(df_filtered), unsafe_allow_html=True)
 
-# ========== DISPLAY ==========
-st.subheader(f"📋 พบ {len(df)} รายการ")
+# ========== VIEW MODE ==========
+view_mode = st.radio("โหมดแสดงผล", ["⚡ เร็ว (ตาราง)", "🎨 สวย (การ์ด)"])
 
-for _, row in df.iterrows():
+st.subheader(f"📋 พบ {len(df_filtered)} รายการ")
 
-    color = get_border_color(row.get("account_drug_ID", ""))
-    sub_color = get_sub_color(row.get("account_sub", ""))
+# ========== FAST MODE ==========
+if view_mode == "⚡ เร็ว (ตาราง)":
+    st.dataframe(df_filtered, use_container_width=True)
 
-    drug = row.get("drug_name", "-")
-    dosage = row.get("dosage", "-")
-    acc = row.get("account_drug_ID", "-")
-    sub = row.get("account_sub", "-")
-    drug_type = row.get("drug_type", "-")
+# ========== CARD MODE ==========
+else:
+    MAX_ROWS = 150
+    df_show = df_filtered.head(MAX_ROWS)
 
-    advice = row.get("advice", "")
-    condition = row.get("condition", "")
-    warning = row.get("warning", "")
-    note = row.get("note", "")
+    st.caption(f"แสดง {len(df_show)} / {len(df_filtered)} รายการ (ป้องกันค้างมือถือ)")
 
-    details = ""
-    if any([advice, condition, warning, note]):
-        details += "<details><summary>📌 รายละเอียดเพิ่มเติม</summary>"
-        if advice: details += f"<div>คำแนะนำ: {advice}</div>"
-        if condition: details += f"<div>เงื่อนไข: {condition}</div>"
-        if warning: details += f"<div>คำเตือน: {warning}</div>"
-        if note: details += f"<div>หมายเหตุ: {note}</div>"
-        details += "</details>"
+    for _, row in df_show.iterrows():
 
-    st.markdown(f"""
-    <div style="border-left:6px solid {color}; padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
-        💊 <b>{drug}</b><br>
-        <span style="color:#666;">{dosage}</span><br>
+        color = get_border_color(row["account_drug_ID"])
+        sub_color = get_sub_color(row["account_sub"])
 
-        <span style="color:#888;">บัญชี: {acc}</span><br>
+        drug = row.get("drug_name", "-")
+        dosage = row.get("dosage", "-")
+        acc = row.get("account_drug_ID", "-")
+        sub = row.get("account_sub", "-")
+        drug_type = row.get("drug_type", "-")
 
-        <span style="background:{sub_color};color:white;padding:2px 6px;border-radius:4px;">
-        {sub}
-        </span><br>
+        advice = row.get("advice", "")
+        condition = row.get("condition", "")
+        warning = row.get("warning", "")
+        note = row.get("note", "")
 
-        <span style="color:#888;">ประเภท: {drug_type}</span>
+        details = ""
+        if any([advice, condition, warning, note]):
+            details += "<details><summary>📌 รายละเอียด</summary>"
+            if advice: details += f"<div>คำแนะนำ: {advice}</div>"
+            if condition: details += f"<div>เงื่อนไข: {condition}</div>"
+            if warning: details += f"<div>คำเตือน: {warning}</div>"
+            if note: details += f"<div>หมายเหตุ: {note}</div>"
+            details += "</details>"
 
-        {details}
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown(f"""
+        <div style="border-left:6px solid {color}; padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
+            💊 <b>{drug}</b><br>
+            <span style="color:#666;">{dosage}</span><br>
+            <span style="color:#888;">บัญชี: {acc}</span><br>
 
-# ========== FOOTER ==========
+            <span style="background:{sub_color};color:white;padding:2px 6px;border-radius:4px;">
+            {sub}
+            </span><br>
+
+            <span style="color:#888;">ประเภท: {drug_type}</span>
+            {details}
+        </div>
+        """, unsafe_allow_html=True)
+
+# footer
 st.markdown("---")
 st.caption("© กลุ่มงานเภสัชกรรม")
