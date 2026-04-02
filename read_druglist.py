@@ -3,7 +3,7 @@ import pandas as pd
 from io import BytesIO
 import base64
 
-# ========== CACHE ==========
+# ========== LOAD ==========
 @st.cache_data
 def load_data():
     df = pd.read_excel("media.xlsx")
@@ -47,27 +47,6 @@ def to_excel_download(df):
     </a>
     """
 
-# ========== COLOR ==========
-def get_border_color(account_id):
-    return {
-        "ก": "#38bdf8",
-        "ข": "#4ade80",
-        "ค": "#facc15",
-        "ง": "#fb923c",
-        "จ(1)": "#f472b6",
-        "จ(2)": "#7a3a1d",
-        "นอกบัญชี": "#a3a3a3",
-    }.get(str(account_id).strip(), "#d1c4e9")
-
-def get_sub_color(sub):
-    return {
-        "b": "#60a5fa",
-        "s": "#34d399",
-        "ex": "#f87171",
-        "R1": "#fbbf24",
-        "R2": "#a78bfa"
-    }.get(str(sub).strip(), "#9ca3af")
-
 # ========== UI ==========
 st.set_page_config(page_title="Drug Finder", page_icon="💊")
 st.markdown("## 💊 บัญชียาหลักแห่งชาติ")
@@ -108,27 +87,24 @@ if search:
 # download
 st.markdown(to_excel_download(df_filtered), unsafe_allow_html=True)
 
-# ========== VIEW MODE ==========
-view_mode = st.radio("โหมดแสดง", ["⚡ เร็ว (ตาราง)", "🎨 สวย (การ์ด)"])
+# ========== VIEW ==========
+view_mode = st.radio("โหมดแสดง", ["⚡ ตาราง", "📦 กล่อง"])
 
 st.subheader(f"📋 พบ {len(df_filtered)} รายการ")
 
-# ========== FAST ==========
-if view_mode == "⚡ เร็ว (ตาราง)":
+# ===== TABLE =====
+if view_mode == "⚡ ตาราง":
     st.dataframe(df_filtered, use_container_width=True)
 
-# ========== CARD ==========
+# ===== BOX =====
 else:
     MAX_ROWS = 80
     df_show = df_filtered.head(MAX_ROWS)
 
     if len(df_filtered) > MAX_ROWS:
-        st.warning("⚠️ แสดงเฉพาะ 80 รายการแรก (ป้องกันมือถือค้าง)")
+        st.warning("⚠️ แสดงเฉพาะ 80 รายการแรก")
 
     for _, row in df_show.iterrows():
-
-        color = get_border_color(row["account_drug_ID"])
-        sub_color = get_sub_color(row["account_sub"])
 
         drug = row.get("drug_name", "-")
         dosage = row.get("dosage", "-")
@@ -143,27 +119,21 @@ else:
 
         details = ""
         if advice:
-            details += f"<span style='color:#2563eb;'>คำแนะนำ: {advice}</span><br>"
+            details += f"คำแนะนำ: {advice}<br>"
         if condition:
-            details += f"<span style='color:#16a34a;'>เงื่อนไข: {condition}</span><br>"
+            details += f"เงื่อนไข: {condition}<br>"
         if warning:
-            details += f"<span style='color:#dc2626;'>คำเตือน: {warning}</span><br>"
+            details += f"คำเตือน: {warning}<br>"
         if note:
-            details += f"<span style='color:#7c3aed;'>หมายเหตุ: {note}</span><br>"
+            details += f"หมายเหตุ: {note}<br>"
 
         st.markdown(f"""
-        <div style="border-left:6px solid {color}; padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
+        <div style="padding:10px; margin:6px; border-radius:6px; border:1px solid #ddd;">
             💊 <b>{drug}</b><br>
-            <span style="color:#666;">{dosage}</span><br>
-
-            <span style="color:#888;">บัญชี: {acc}</span><br>
-
-            <span style="background:{sub_color};color:white;padding:2px 6px;border-radius:4px;">
-            {sub}
-            </span><br>
-
-            <span style="color:#888;">ประเภท: {drug_type}</span><br>
-
+            ขนาดยา: {dosage}<br>
+            บัญชี: {acc}<br>
+            บัญชีย่อย: {sub}<br>
+            ประเภทยา: {drug_type}<br>
             {details}
         </div>
         """, unsafe_allow_html=True)
