@@ -51,17 +51,32 @@ def to_excel_download(df):
     </a>
     """
 
+# ========== DEFAULT STATE ==========
+defaults = {
+    "subtype1": "--ทั้งหมด--",
+    "subtype2": "--ทั้งหมด--",
+    "subtype3": "--ทั้งหมด--",
+    "account": "--ทั้งหมด--",
+    "sub_account": "--ทั้งหมด--",
+    "search": "",
+    "view_mode": "⚡ ตาราง"
+}
+
+for k, v in defaults.items():
+    if k not in st.session_state:
+        st.session_state[k] = v
+
 # ========== UI ==========
 st.set_page_config(page_title="Drug Finder", page_icon="💊")
 st.markdown("## 💊 บัญชียาหลักแห่งชาติ 2569")
 
 # ========== CLEAR ==========
 if st.button("🔄 เคลียร์ทั้งหมด"):
-    for k in ["subtype1","subtype2","subtype3","account","sub_account","search"]:
-        st.session_state[k] = "--ทั้งหมด--" if k != "search" else ""
+    for k, v in defaults.items():
+        st.session_state[k] = v
     st.rerun()
 
-# ========== CASCADE FILTER UI ==========
+# ========== CASCADE FILTER ==========
 df_ui = df.copy()
 
 col1, col2 = st.columns(2)
@@ -74,7 +89,7 @@ with col1:
         key="subtype1"
     )
 
-# reset subtype2/3 ถ้า subtype1 เปลี่ยน
+# reset subtype2/3 เมื่อ subtype1 เปลี่ยน
 if "prev_subtype1" not in st.session_state:
     st.session_state.prev_subtype1 = None
 
@@ -140,7 +155,12 @@ df_filtered = df_ui
 st.markdown(to_excel_download(df_filtered), unsafe_allow_html=True)
 
 # ========== VIEW ==========
-view_mode = st.radio("โหมดแสดง", ["⚡ ตาราง", "📦 กล่อง"])
+view_mode = st.radio(
+    "โหมดแสดง",
+    ["⚡ ตาราง", "📦 กล่อง"],
+    key="view_mode"
+)
+
 st.subheader(f"📋 พบ {len(df_filtered)} รายการ")
 
 # ===== TABLE =====
