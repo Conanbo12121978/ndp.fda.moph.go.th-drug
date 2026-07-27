@@ -665,6 +665,12 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
                             dosage_list = sorted(dosage_list)
 
                             dosage_text = " • ".join(dosage_list)
+                            render_card(
+                                 row,
+                                dosage_text
+                             )
+
+
 
                         
 
