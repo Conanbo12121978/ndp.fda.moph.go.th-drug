@@ -666,10 +666,7 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
 
                             dosage_text = " • ".join(dosage_list)
 
-                            render_card(
-                                row,
-                                dosage_text
-                            )
+                        
 
 
 
