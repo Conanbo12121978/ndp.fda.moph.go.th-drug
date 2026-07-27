@@ -52,7 +52,6 @@ def load_data():
 
     return df
 
-
 df = load_data()
 
 # ======================================================
@@ -81,7 +80,6 @@ def account_color(account):
     }
 
     return colors.get(account, "#8b5cf6")
-
 
 # ======================================================
 # DOWNLOAD EXCEL
@@ -128,89 +126,10 @@ display:inline-block;
 </a>
 """
 
-
 # ======================================================
 # DRUG CARD
 # ======================================================
-def merge_dosage(df):
 
-    df = df.copy()
-
-    # รวม dosage ที่ชื่อยาเดียวกัน
-
-    df["dosage"] = (
-
-        df["dosage"]
-
-        .fillna("")
-
-        .astype(str)
-
-    )
-
-    df = (
-
-        df.groupby(
-
-            [
-
-                "drug_name",
-
-                "account_drug_ID",
-
-                "account_sub",
-
-                "drug_type",
-
-                "condition",
-
-                "warning",
-
-                "note",
-
-                "subtype1_name",
-
-                "subtype2_name",
-
-                "subtype3_name",
-
-                "subtype4_name"
-
-            ],
-
-            dropna=False,
-
-            as_index=False
-
-        )
-
-        .agg({
-
-            "dosage": lambda x:
-
-                ", ".join(
-
-                    sorted(
-
-                        set(
-
-                            i.strip()
-
-                            for i in x
-
-                            if i.strip()
-
-                        )
-
-                    )
-
-                )
-
-        })
-
-    )
-
-    return df
 def render_card(row):
 
     color = account_color(
@@ -297,7 +216,6 @@ style="border-left:7px solid {color};">
         html,
         unsafe_allow_html=True
     )
-
 
 # ======================================================
 # CSS
@@ -587,13 +505,13 @@ if view_mode == "📋 รายการยา":
     else:
 
         df_show = df_filter.copy()
-        df_show = merge_dosage(df_show)
+
         df_show = df_show.sort_values(
             by=[
                 "drug_name",
                 "account_drug_ID"
             ]
-         )
+        )
 
         st.subheader(
             f"📋 พบ {len(df_show):,} รายการ"
@@ -616,8 +534,7 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
     else:
 
         df_show = df_filter.copy()
-        df_show = merge_dosage(df_show)
-        
+
         cols = [
             "subtype1_name",
             "subtype2_name",
@@ -763,5 +680,8 @@ font-size:13px;
     unsafe_allow_html=True
 )
 
+โค้ดนี้ ถ้าต้องการให้ drug card รวบ dosage ในการ์ดเดียวสำหรับชื่อยานั้นนั้น ต้องไแก้ตรงไหน เช่น
 
+💉 tab ถ้ามี inj ก็ให้ต่อจาก tab ไปเลย แก้เป็น
 
+💉 tab, inj
