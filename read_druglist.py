@@ -438,7 +438,7 @@ with col4:
     )
 
     account_sub = st.selectbox(
-        "บัญชีย่อย",
+        "บัญชีใหม่",
         account_sub_list,
         key="account_sub"
     )
