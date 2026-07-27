@@ -132,7 +132,85 @@ display:inline-block;
 # ======================================================
 # DRUG CARD
 # ======================================================
+def merge_dosage(df):
 
+    df = df.copy()
+
+    # รวม dosage ที่ชื่อยาเดียวกัน
+
+    df["dosage"] = (
+
+        df["dosage"]
+
+        .fillna("")
+
+        .astype(str)
+
+    )
+
+    df = (
+
+        df.groupby(
+
+            [
+
+                "drug_name",
+
+                "account_drug_ID",
+
+                "account_sub",
+
+                "drug_type",
+
+                "condition",
+
+                "warning",
+
+                "note",
+
+                "subtype1_name",
+
+                "subtype2_name",
+
+                "subtype3_name",
+
+                "subtype4_name"
+
+            ],
+
+            dropna=False,
+
+            as_index=False
+
+        )
+
+        .agg({
+
+            "dosage": lambda x:
+
+                ", ".join(
+
+                    sorted(
+
+                        set(
+
+                            i.strip()
+
+                            for i in x
+
+                            if i.strip()
+
+                        )
+
+                    )
+
+                )
+
+        })
+
+    )
+
+    return df
 def render_card(row):
 
     color = account_color(
@@ -509,13 +587,13 @@ if view_mode == "📋 รายการยา":
     else:
 
         df_show = df_filter.copy()
-
+        df_show = merge_dosage(df_show)
         df_show = df_show.sort_values(
             by=[
                 "drug_name",
                 "account_drug_ID"
             ]
-        )
+         )
 
         st.subheader(
             f"📋 พบ {len(df_show):,} รายการ"
@@ -538,7 +616,8 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
     else:
 
         df_show = df_filter.copy()
-
+        df_show = merge_dosage(df_show)
+        
         cols = [
             "subtype1_name",
             "subtype2_name",
