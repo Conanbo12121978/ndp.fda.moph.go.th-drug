@@ -58,7 +58,6 @@ df = load_data()
 # ======================================================
 # ACCOUNT COLOR
 # ======================================================
-
 def account_color(account):
 
     account = str(account).strip()
@@ -81,6 +80,7 @@ def account_color(account):
     }
 
     return colors.get(account, "#8b5cf6")
+
 
 
 # ======================================================
@@ -133,13 +133,11 @@ display:inline-block;
 # DRUG CARD
 # ======================================================
 
-def render_card(row):
+def render_card(row, dosage_text=""):
 
-    color = account_color(
-        row["account_drug_ID"]
-    )
+    color = sub_account_color(row["account_sub"])
 
-    dosage = row.get("dosage", "")
+
     account = row.get("account_drug_ID", "-")
     sub = row.get("account_sub", "")
     drug_type = row.get("drug_type", "")
@@ -165,12 +163,10 @@ style="border-left:7px solid {color};">
 </div>
 """
 
-    if dosage:
-        html += f"""
+    if dosage_text:
+    html += f"""
 <div class="drug-detail">
-
-💉 {dosage}
-
+💉 {dosage_text}
 </div>
 """
 
@@ -519,9 +515,21 @@ if view_mode == "📋 รายการยา":
             f"📋 พบ {len(df_show):,} รายการ"
         )
 
-        for _, row in df_show.iterrows():
+        for drug_name, group in df_show.groupby("drug_name", sort=True):
 
-            render_card(row)
+    row = group.iloc[0]
+
+    dosage_list = (
+        group["dosage"]
+        .dropna()
+        .astype(str)
+        .unique()
+        .tolist()
+    )
+
+    dosage_text = " • ".join(dosage_list)
+
+    render_card(row, dosage_text)
 
 # ======================================================
 # 🗂 CATEGORY VIEW
