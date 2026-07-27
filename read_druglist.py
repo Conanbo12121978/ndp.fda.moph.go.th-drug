@@ -158,7 +158,7 @@ style="border-left:7px solid {color};">
 
 🏷️ <b>บัญชี :</b> {account}
 
-&nbsp;
+</div>
 
 📑 <b>บัญชีใหม่ :</b> {sub}
 
