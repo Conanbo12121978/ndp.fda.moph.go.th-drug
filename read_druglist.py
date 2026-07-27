@@ -58,28 +58,21 @@ df = load_data()
 # ======================================================
 # ACCOUNT COLOR
 # ======================================================
-def account_color(account):
+def sub_account_color(sub):
 
-    account = str(account).strip()
+    sub = str(sub).strip().lower()
 
-    colors = {
-
-        "ก": "#3b82f6",
-        "ข": "#10b981",
-        "ค": "#eab308",
-        "ง": "#f97316",
-        "จ": "#ec4899",
-
-        "A": "#3b82f6",
-        "B": "#10b981",
-        "C": "#eab308",
-
+    color_map = {
+        "b": "#38bdf8",
+        "s": "#4ade80",
+        "ex": "#facc15",
+        "r1": "#fb923c",
+        "r2": "#f472b6",
         "นอกบัญชี": "#9ca3af",
-        "บัญชียาจากสมุนไพร": "#8b5a2b"
-
+        "บัญชียาจากสมุนไพร": "#8b5a2b",
     }
 
-    return colors.get(account, "#8b5cf6")
+    return color_map.get(sub, "#8b5cf6")
 
 
 
