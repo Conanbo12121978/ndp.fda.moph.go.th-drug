@@ -3,9 +3,9 @@ import pandas as pd
 from io import BytesIO
 import base64
 
-# ======================================================
-# PAGE CONFIG
-# ======================================================
+# =====================================================
+# PAGE
+# =====================================================
 
 st.set_page_config(
     page_title="Drug Finder",
@@ -13,9 +13,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# ======================================================
+# =====================================================
 # LOAD DATA
-# ======================================================
+# =====================================================
 
 @st.cache_data
 def load_data():
@@ -41,10 +41,12 @@ def load_data():
     df = df.replace("_x000d_", " ", regex=True)
     df = df.replace("-", "")
 
-    for c in df.columns:
-        if df[c].dtype == "object":
-            df[c] = (
-                df[c]
+    for col in df.columns:
+
+        if df[col].dtype == "object":
+
+            df[col] = (
+                df[col]
                 .fillna("")
                 .astype(str)
                 .str.strip()
@@ -55,30 +57,34 @@ def load_data():
 
 df = load_data()
 
-# ======================================================
-# ACCOUNT COLOR
-# ======================================================
+# =====================================================
+# COLOR OF SUB ACCOUNT
+# =====================================================
+
 def sub_account_color(sub):
 
     sub = str(sub).strip().lower()
 
     color_map = {
+
         "b": "#38bdf8",
         "s": "#4ade80",
         "ex": "#facc15",
         "r1": "#fb923c",
         "r2": "#f472b6",
+
+        "d": "#94a3b8",
+
         "นอกบัญชี": "#9ca3af",
         "บัญชียาจากสมุนไพร": "#8b5a2b",
+
     }
 
     return color_map.get(sub, "#8b5cf6")
 
-
-
-# ======================================================
+# =====================================================
 # DOWNLOAD EXCEL
-# ======================================================
+# =====================================================
 
 def excel_download(df):
 
@@ -121,101 +127,15 @@ display:inline-block;
 </a>
 """
 
-
-# ======================================================
-# DRUG CARD
-# ======================================================
-
-def render_card(row, dosage_text=""):
-
-    color = sub_account_color(row["account_sub"])
-
-
-    account = row.get("account_drug_ID", "-")
-    sub = row.get("account_sub", "")
-    drug_type = row.get("drug_type", "")
-
-    html = f"""
-<div class="drug-card"
-style="border-left:7px solid {color};">
-
-<div class="drug-name">
-
-💊 {row["drug_name"]}
-
-</div>
-
-<div class="drug-detail">
-
-🏷️ <b>บัญชี :</b> {account}
-
-&nbsp;&nbsp;&nbsp;
-
-📑 <b>บัญชีย่อย :</b> {sub}
-
-</div>
-"""
-
-    if dosage_text:
-        html += f"""
-<div class="drug-detail">
-💉 {dosage_text}
-</div>
-"""
-
-    if drug_type:
-        html += f"""
-<div class="drug-detail">
-
-🧪 {drug_type}
-
-</div>
-"""
-
-    if row.get("condition", ""):
-        html += f"""
-<div class="drug-detail">
-
-📝 {row["condition"]}
-
-</div>
-"""
-
-    if row.get("warning", ""):
-        html += f"""
-<div class="drug-detail">
-
-⚠️ {row["warning"]}
-
-</div>
-"""
-
-    if row.get("note", ""):
-        html += f"""
-<div class="drug-detail">
-
-📌 {row["note"]}
-
-</div>
-"""
-
-    html += "</div>"
-
-    st.markdown(
-        html,
-        unsafe_allow_html=True
-    )
-
-
-# ======================================================
+# =====================================================
 # CSS
-# ======================================================
+# =====================================================
 
 st.markdown("""
 <style>
 
 .block-container{
-    padding-top:25px;
+    padding-top:20px;
 }
 
 .group-box{
@@ -230,262 +150,360 @@ st.markdown("""
 }
 
 .subgroup2{
+    margin-left:10px;
+    margin-top:18px;
+    margin-bottom:8px;
     font-size:20px;
     font-weight:bold;
-    color:#4c1d95;
-    margin-top:18px;
+    color:#5b21b6;
 }
 
 .subgroup3{
+    margin-left:30px;
+    margin-top:12px;
+    margin-bottom:6px;
     font-size:17px;
     font-weight:bold;
-    color:#6d28d9;
-    margin-left:20px;
-    margin-top:12px;
+    color:#7c3aed;
 }
 
 .subgroup4{
-    font-size:16px;
+    margin-left:50px;
+    margin-top:10px;
+    margin-bottom:6px;
+    font-size:15px;
     font-weight:bold;
     color:#9333ea;
-    margin-left:40px;
-    margin-top:10px;
 }
 
 .drug-card{
+
     background:white;
-    border-radius:10px;
     border:1px solid #dddddd;
+    border-radius:10px;
+
     padding:14px;
-    margin-left:50px;
+
+    margin-left:60px;
     margin-bottom:10px;
+
     box-shadow:0 1px 4px rgba(0,0,0,.08);
+
 }
 
 .drug-name{
+
     font-size:18px;
     font-weight:bold;
+
 }
 
 .drug-detail{
-    font-size:14px;
+
+    margin-top:5px;
     color:#666;
-    margin-top:4px;
+    font-size:14px;
+
 }
 
 [data-theme="dark"] .drug-card{
+
     background:#1f2937;
     border-color:#4b5563;
+
 }
 
 [data-theme="dark"] .group-box{
+
     background:#312e81;
+
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# ======================================================
+# =====================================================
 # HEADER
-# ======================================================
+# =====================================================
 
 st.title("💊 บัญชียาหลักแห่งชาติ พ.ศ. 2569")
-st.caption("ค้นหายา • จัดหมวดหมู่ • ดาวน์โหลดข้อมูล Excel")
 
-# ======================================================
+st.caption(
+    "ค้นหายา • จัดหมวดหมู่ • ดาวน์โหลด Excel"
+)
+
+# =====================================================
 # SESSION STATE
-# ======================================================
+# =====================================================
 
 defaults = {
-    "subtype1": "--ทั้งหมด--",
-    "subtype2": "--ทั้งหมด--",
-    "subtype3": "--ทั้งหมด--",
-    "account": "--ทั้งหมด--",
-    "account_sub": "--ทั้งหมด--",
-    "search": "",
-    "view_mode": "📋 รายการยา"
+
+    "subtype1":"--ทั้งหมด--",
+    "subtype2":"--ทั้งหมด--",
+    "subtype3":"--ทั้งหมด--",
+
+    "account":"--ทั้งหมด--",
+    "account_sub":"--ทั้งหมด--",
+
+    "search":"",
+
+    "view_mode":"📋 รายการยา"
+
 }
 
-for key, value in defaults.items():
-    if key not in st.session_state:
-        st.session_state[key] = value
+for k,v in defaults.items():
 
-# ======================================================
+    if k not in st.session_state:
+
+        st.session_state[k]=v
+
+# =====================================================
 # CLEAR FILTER
-# ======================================================
+# =====================================================
 
 if st.button("🔄 เคลียร์ตัวกรองทั้งหมด"):
 
-    for key, value in defaults.items():
-        st.session_state[key] = value
+    for k,v in defaults.items():
+
+        st.session_state[k]=v
 
     st.rerun()
 
-# ======================================================
+# =====================================================
 # FILTER
-# ======================================================
+# =====================================================
 
-df_filter = df.copy()
+df_filter=df.copy()
 
-col1, col2 = st.columns(2)
-
-# ----------------------------
-# subtype1
-# ----------------------------
+col1,col2=st.columns(2)
 
 with col1:
 
-    subtype1_list = ["--ทั้งหมด--"] + sorted(
-        df["subtype1_name"].dropna().unique()
-    )
+    subtype1=st.selectbox(
 
-    subtype1 = st.selectbox(
         "ประเภทหลัก",
-        subtype1_list,
+
+        ["--ทั้งหมด--"]+
+        sorted(df["subtype1_name"].unique()),
+
         key="subtype1"
+
     )
 
-if subtype1 != "--ทั้งหมด--":
+if subtype1!="--ทั้งหมด--":
 
-    df_filter = df_filter[
-        df_filter["subtype1_name"] == subtype1
+    df_filter=df_filter[
+        df_filter["subtype1_name"]==subtype1
     ]
 
-# ----------------------------
-# subtype2
-# ----------------------------
 
 with col2:
 
-    subtype2_list = ["--ทั้งหมด--"] + sorted(
-        df_filter["subtype2_name"].dropna().unique()
-    )
+    subtype2=st.selectbox(
 
-    subtype2 = st.selectbox(
         "ประเภทรอง",
-        subtype2_list,
+
+        ["--ทั้งหมด--"]+
+        sorted(df_filter["subtype2_name"].unique()),
+
         key="subtype2"
+
     )
 
-if subtype2 != "--ทั้งหมด--":
+if subtype2!="--ทั้งหมด--":
 
-    df_filter = df_filter[
-        df_filter["subtype2_name"] == subtype2
+    df_filter=df_filter[
+        df_filter["subtype2_name"]==subtype2
     ]
 
-# ----------------------------
-# subtype3
-# ----------------------------
 
-subtype3_list = ["--ทั้งหมด--"] + sorted(
-    df_filter["subtype3_name"].dropna().unique()
-)
+subtype3=st.selectbox(
 
-subtype3 = st.selectbox(
     "ประเภทย่อย",
-    subtype3_list,
+
+    ["--ทั้งหมด--"]+
+    sorted(df_filter["subtype3_name"].unique()),
+
     key="subtype3"
+
 )
 
-if subtype3 != "--ทั้งหมด--":
+if subtype3!="--ทั้งหมด--":
 
-    df_filter = df_filter[
-        df_filter["subtype3_name"] == subtype3
+    df_filter=df_filter[
+        df_filter["subtype3_name"]==subtype3
     ]
 
-# ======================================================
-# ACCOUNT
-# ======================================================
+# =====================================================
+# ACCOUNT FILTER
+# =====================================================
 
-col3, col4 = st.columns(2)
+col3,col4=st.columns(2)
 
 with col3:
 
-    account_list = ["--ทั้งหมด--"] + sorted(
-        df["account_drug_ID"].dropna().unique()
-    )
+    account=st.selectbox(
 
-    account = st.selectbox(
         "บัญชียา",
-        account_list,
+
+        ["--ทั้งหมด--"]+
+        sorted(df["account_drug_ID"].unique()),
+
         key="account"
+
     )
 
-if account != "--ทั้งหมด--":
+if account!="--ทั้งหมด--":
 
-    df_filter = df_filter[
-        df_filter["account_drug_ID"] == account
+    df_filter=df_filter[
+        df_filter["account_drug_ID"]==account
     ]
+
 
 with col4:
 
-    account_sub_list = ["--ทั้งหมด--"] + sorted(
-        df["account_sub"].dropna().unique()
-    )
+    account_sub=st.selectbox(
 
-    account_sub = st.selectbox(
         "บัญชีย่อย",
-        account_sub_list,
+
+        ["--ทั้งหมด--"]+
+        sorted(df["account_sub"].unique()),
+
         key="account_sub"
+
     )
 
-if account_sub != "--ทั้งหมด--":
+if account_sub!="--ทั้งหมด--":
 
-    df_filter = df_filter[
-        df_filter["account_sub"] == account_sub
+    df_filter=df_filter[
+        df_filter["account_sub"]==account_sub
     ]
 
-# ======================================================
+# =====================================================
 # SEARCH
-# ======================================================
+# =====================================================
 
-search = st.text_input(
+search=st.text_input(
+
     "🔍 ค้นหาชื่อยา",
-    key="search",
-    placeholder="เช่น Paracetamol"
+
+    key="search"
+
 )
 
 if search:
 
-    df_filter = df_filter[
-        df_filter["drug_name"]
-        .str.contains(
+    df_filter=df_filter[
+        df_filter["drug_name"].str.contains(
             search,
             case=False,
             na=False
         )
     ]
 
-# ======================================================
-# SUMMARY
-# ======================================================
+# =====================================================
+# DOWNLOAD
+# =====================================================
 
 st.markdown(
+
     excel_download(df_filter),
+
     unsafe_allow_html=True
+
 )
 
 st.caption(
-    f"พบข้อมูลทั้งหมด **{len(df_filter):,}** รายการ"
+
+    f"พบข้อมูล {len(df_filter):,} รายการ"
+
 )
 
-# ======================================================
+# =====================================================
+# RENDER DRUG CARD
+# =====================================================
+
+def render_card(row, dosage_text=""):
+
+    color = sub_account_color(row["account_sub"])
+
+    html = f"""
+<div class="drug-card" style="border-left:7px solid {color};">
+
+<div class="drug-name">
+💊 {row["drug_name"]}
+</div>
+
+<div class="drug-detail">
+🏷️ <b>บัญชี :</b> {row["account_drug_ID"]}
+
+&nbsp;&nbsp;&nbsp;
+
+📑 <b>บัญชีย่อย :</b> {row["account_sub"]}
+</div>
+"""
+
+    if dosage_text:
+        html += f"""
+<div class="drug-detail">
+💉 {dosage_text}
+</div>
+"""
+
+    if row["drug_type"]:
+        html += f"""
+<div class="drug-detail">
+🧪 {row["drug_type"]}
+</div>
+"""
+
+    if row["condition"]:
+        html += f"""
+<div class="drug-detail">
+📝 {row["condition"]}
+</div>
+"""
+
+    if row["warning"]:
+        html += f"""
+<div class="drug-detail">
+⚠️ {row["warning"]}
+</div>
+"""
+
+    if row["note"]:
+        html += f"""
+<div class="drug-detail">
+📌 {row["note"]}
+</div>
+"""
+
+    html += "</div>"
+
+    st.markdown(html, unsafe_allow_html=True)
+
+# =====================================================
 # VIEW MODE
-# ======================================================
+# =====================================================
 
 view_mode = st.radio(
+
     "รูปแบบการแสดงผล",
+
     [
         "📋 รายการยา",
         "🗂 จัดตามหมวดหมู่"
     ],
+
     horizontal=True,
+
     key="view_mode"
+
 )
 
-# ======================================================
-# 📋 LIST VIEW
-# ======================================================
+# =====================================================
+# LIST VIEW
+# =====================================================
 
 if view_mode == "📋 รายการยา":
 
@@ -498,36 +516,38 @@ if view_mode == "📋 รายการยา":
         df_show = df_filter.copy()
 
         df_show = df_show.sort_values(
-            by=[
-                "drug_name",
-                "account_drug_ID"
-            ]
+            by=["drug_name", "account_sub"]
         )
 
         st.subheader(
-            f"📋 พบ {len(df_show):,} รายการ"
+            f"📋 พบ {df_show['drug_name'].nunique():,} รายการยา"
         )
-for drug_name, group in df_show.groupby("drug_name", sort=True):
 
-    row = group.iloc[0]
+        for drug_name, group in df_show.groupby("drug_name", sort=True):
 
-    dosage_list = (
-        group["dosage"]
-        .dropna()
-        .astype(str)
-        .str.strip()
-        .unique()
-        .tolist()
-    )
+            row = group.iloc[0]
 
-    dosage_text = " • ".join(dosage_list)
+            dosage_list = (
+                group["dosage"]
+                .dropna()
+                .astype(str)
+                .str.strip()
+            )
 
-    render_card(row, dosage_text)
+            dosage_list = sorted(
+                dosage_list.unique()
+            )
 
+            dosage_text = " • ".join(dosage_list)
 
-# ======================================================
-# 🗂 CATEGORY VIEW
-# ======================================================
+            render_card(
+                row,
+                dosage_text
+            )
+
+# =====================================================
+# CATEGORY VIEW
+# =====================================================
 
 elif view_mode == "🗂 จัดตามหมวดหมู่":
 
@@ -548,140 +568,110 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
         ]
 
         for c in cols:
-
             df_show[c] = (
                 df_show[c]
                 .fillna("")
                 .astype(str)
             )
 
-        df_show = df_show.sort_values(
-            by=cols
-        )
+        df_show = df_show.sort_values(cols)
 
-        # ----------------------------
+        # ============================
         # subtype1
-        # ----------------------------
+        # ============================
 
-        for subtype1, g1 in df_show.groupby(
-            "subtype1_name",
-            dropna=False
-        ):
+        for subtype1, g1 in df_show.groupby("subtype1_name", sort=False):
 
             st.markdown(
                 f"""
 <div class="group-box">
-
-🟣 {subtype1 if subtype1 else 'ไม่ระบุ'}
-
+🟣 {subtype1 if subtype1 else "ไม่ระบุ"}
 </div>
 """,
                 unsafe_allow_html=True
             )
 
-            # ----------------------------
+            # ============================
             # subtype2
-            # ----------------------------
+            # ============================
 
-            for subtype2, g2 in g1.groupby(
-                "subtype2_name",
-                dropna=False
-            ):
+            for subtype2, g2 in g1.groupby("subtype2_name", sort=False):
 
                 if subtype2:
 
                     st.markdown(
                         f"""
 <div class="subgroup2">
-
 🔷 {subtype2}
-
 </div>
 """,
                         unsafe_allow_html=True
                     )
 
-                # ----------------------------
+                # ============================
                 # subtype3
-                # ----------------------------
+                # ============================
 
-                for subtype3, g3 in g2.groupby(
-                    "subtype3_name",
-                    dropna=False
-                ):
+                for subtype3, g3 in g2.groupby("subtype3_name", sort=False):
 
                     if subtype3:
 
                         st.markdown(
                             f"""
 <div class="subgroup3">
-
 ▸ {subtype3}
-
 </div>
 """,
                             unsafe_allow_html=True
                         )
 
-                    # ----------------------------
+                    # ============================
                     # subtype4
-                    # ----------------------------
+                    # ============================
 
-                    for subtype4, g4 in g3.groupby(
-                        "subtype4_name",
-                        dropna=False
-                    ):
+                    for subtype4, g4 in g3.groupby("subtype4_name", sort=False):
 
                         if subtype4:
 
                             st.markdown(
                                 f"""
 <div class="subgroup4">
-
 • {subtype4}
-
 </div>
 """,
                                 unsafe_allow_html=True
                             )
 
-                        for _, row in g4.iterrows():
+                        # ============================
+                        # รวม Generic ให้เหลือการ์ดเดียว
+                        # ============================
 
-                            render_card(row)
+                        for drug_name, group in g4.groupby(
+                            "drug_name",
+                            sort=True
+                        ):
 
-# ======================================================
-# FOOTER
-# ======================================================
+                            row = group.iloc[0]
 
-st.markdown("---")
+                            dosage_list = (
+                                group["dosage"]
+                                .dropna()
+                                .astype(str)
+                                .str.strip()
+                                .unique()
+                                .tolist()
+                            )
 
-col1, col2 = st.columns([1, 1])
+                            dosage_list = sorted(dosage_list)
 
-with col1:
-    st.caption(
-        f"📊 จำนวนข้อมูลทั้งหมด : {len(df_filter):,} รายการ"
-    )
+                            dosage_text = " • ".join(dosage_list)
 
-with col2:
-    st.caption(
-        "💊 ข้อมูลบัญชียาหลักแห่งชาติ พ.ศ. 2569"
-    )
+                            render_card(
+                                row,
+                                dosage_text
+                            )
 
-st.markdown(
-    """
-<div style="
-text-align:center;
-padding:15px;
-color:#888;
-font-size:13px;
-">
 
-จัดทำโดย กลุ่มงานเภสัชกรรม<br>
-โรงพยาบาลท้ายเหมืองชัยพัฒน์
 
-</div>
-""",
-    unsafe_allow_html=True
-)
 
 
