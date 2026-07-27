@@ -139,7 +139,7 @@ def render_card(row):
         row["account_sub"]
     )
 
-    dosage = row.get("dosage", "")
+    
     account = row.get("account_drug_ID", "-")
     sub = row.get("account_sub", "")
     drug_type = row.get("drug_type", "")
