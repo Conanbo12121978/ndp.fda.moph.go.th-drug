@@ -157,9 +157,9 @@ style="border-left:7px solid {color};">
 <div class="drug-detail">
 
 🏷️ <b>บัญชี :</b> {account}
-
 </div>
-"""
+
+<div class="drug-detail">
 
 📑 <b>บัญชีใหม่ :</b> {sub}
 
