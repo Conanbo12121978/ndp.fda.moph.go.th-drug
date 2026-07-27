@@ -29,7 +29,7 @@ def load_data():
         "subgroup3_name": "subtype4_name",
         "generic_name": "drug_name",
         "บัญชียา": "account_drug_ID",
-        "บัญชีย่อย": "account_sub",
+        "บัญชีใหม่": "account_sub",
         "ประเภทยา": "drug_type",
         "เงื่อนไข": "condition",
         "คำเตือน": "warning",
@@ -65,11 +65,11 @@ def account_color(account):
 
     colors = {
 
-        "ก": "#3b82f6",
-        "ข": "#10b981",
-        "ค": "#eab308",
-        "ง": "#f97316",
-        "จ": "#ec4899",
+        "b": "#3b82f6",
+        "s": "#10b981",
+        "ex": "#eab308",
+        "R1": "#f97316",
+        "R2": "#ec4899",
 
         "A": "#3b82f6",
         "B": "#10b981",
@@ -136,7 +136,7 @@ display:inline-block;
 def render_card(row):
 
     color = account_color(
-        row["account_drug_ID"]
+        row["account_sub"]
     )
 
     dosage = row.get("dosage", "")
@@ -158,9 +158,9 @@ style="border-left:7px solid {color};">
 
 🏷️ <b>บัญชี :</b> {account}
 
-&nbsp;&nbsp;&nbsp;
+&nbsp;
 
-📑 <b>บัญชีย่อย :</b> {sub}
+📑 <b>บัญชีใหม่ :</b> {sub}
 
 </div>
 """
