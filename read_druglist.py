@@ -139,7 +139,7 @@ def render_card(row):
         row["account_sub"]
     )
 
-    
+    dosage = row.get("dosage", "")
     account = row.get("account_drug_ID", "-")
     sub = row.get("account_sub", "")
     drug_type = row.get("drug_type", "")
@@ -162,6 +162,17 @@ style="border-left:7px solid {color};">
 <div class="drug-detail">
 
 📑 <b>บัญชีใหม่ :</b> {sub}
+
+</div>
+"""
+
+    if dosage:
+
+        html += f"""
+
+<div class="drug-detail">
+
+💉 {dosage} 
 
 </div>
 """
