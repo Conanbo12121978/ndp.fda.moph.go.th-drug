@@ -507,8 +507,7 @@ if view_mode == "📋 รายการยา":
         st.subheader(
             f"📋 พบ {len(df_show):,} รายการ"
         )
-
-        for drug_name, group in df_show.groupby("drug_name", sort=True):
+for drug_name, group in df_show.groupby("drug_name", sort=True):
 
     row = group.iloc[0]
 
@@ -516,6 +515,7 @@ if view_mode == "📋 รายการยา":
         group["dosage"]
         .dropna()
         .astype(str)
+        .str.strip()
         .unique()
         .tolist()
     )
@@ -523,6 +523,7 @@ if view_mode == "📋 รายการยา":
     dosage_text = " • ".join(dosage_list)
 
     render_card(row, dosage_text)
+
 
 # ======================================================
 # 🗂 CATEGORY VIEW
