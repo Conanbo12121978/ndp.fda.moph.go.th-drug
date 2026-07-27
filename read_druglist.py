@@ -164,7 +164,7 @@ style="border-left:7px solid {color};">
 """
 
     if dosage_text:
-    html += f"""
+        html += f"""
 <div class="drug-detail">
 💉 {dosage_text}
 </div>
