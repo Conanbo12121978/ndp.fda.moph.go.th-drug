@@ -166,15 +166,6 @@ style="border-left:7px solid {color};">
 </div>
 """
 
-    if dosage:
-        html += f"""
-<div class="drug-detail">
-
-💉 {dosage}
-
-</div>
-"""
-
     if drug_type:
         html += f"""
 <div class="drug-detail">
