@@ -68,8 +68,8 @@ def sub_account_color(sub):
         "b":"#2563eb",
         "s":"#16a34a",
         "ex":"#f59e0b",
-        "R1":"#FCE4EC",
-        "R2":"#F4CCCC",
+        "r1":"#EC4899",
+        "r2": "#DC2626",
 
 
         "":"#9ca3af"
