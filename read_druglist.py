@@ -163,14 +163,10 @@ style="border-left:7px solid {color};">
 </div>
 """
 
-    if dosage:
-
-        html += f"""
-
+    if dosage_text:
+    html += f"""
 <div class="drug-detail">
-
-💉 {dosage} 
-
+💉 {dosage_text}
 </div>
 """
 
@@ -634,9 +630,21 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
                                 unsafe_allow_html=True
                             )
 
-                        for _, row in g4.iterrows():
+                        for drug_name, group in g4.groupby("drug_name"):
 
-                            render_card(row)
+                            row = group.iloc[0]
+
+                            dosage_list = (
+                                group["dosage"]
+                                .dropna()
+                                .astype(str)
+                                .unique()
+                                .tolist()
+                             )
+
+                             dosage_text = " • ".join(dosage_list)
+
+                             render_card(row, dosage_text)
 
 # ======================================================
 # FOOTER
