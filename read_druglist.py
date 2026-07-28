@@ -268,7 +268,7 @@ def render_card(row, dosage_text=""):
 <div class="drug-detail">
 🏷️ <b>บัญชี :</b> {account}
 &nbsp;&nbsp;&nbsp;
-📑 <b>บัญชีย่อย :</b> {sub}
+📑 <b>บัญชีใหม่ :</b> {sub}
 </div>
 """
 
