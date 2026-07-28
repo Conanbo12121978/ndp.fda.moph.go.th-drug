@@ -230,6 +230,7 @@ st.markdown("""
 
 .group-box{
     background:#ede9fe;
+    color:#111827;
     border-left:8px solid #7c3aed;
     border-radius:10px;
     padding:14px 18px;
