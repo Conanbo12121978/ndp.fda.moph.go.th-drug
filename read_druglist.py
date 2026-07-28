@@ -275,21 +275,13 @@ st.markdown("""
 .drug-name{
     font-size:18px;
     font-weight:bold;
+    color:#111827;
 }
 
 .drug-detail{
     font-size:14px;
-    color:#666;
+    color:#666666;
     margin-top:4px;
-}
-
-[data-theme="dark"] .drug-card{
-    background:#1f2937;
-    border-color:#4b5563;
-}
-
-[data-theme="dark"] .group-box{
-    background:#312e81;
 }
 
 </style>
