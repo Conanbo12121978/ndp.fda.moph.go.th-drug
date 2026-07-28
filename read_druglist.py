@@ -629,10 +629,12 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
 """,
                                 unsafe_allow_html=True
                             )
+                            for (drug_name, account_sub), group in g4.groupby(
 
-                        for (drug_name, sub), group in g4.groupby(
-                                ["drug_name", "account_sub"],
-                                sort=True
+                                    ["drug_name", "account_sub"],
+
+                                    sort=True
+                        
                             ):
 
                             row = group.iloc[0]
