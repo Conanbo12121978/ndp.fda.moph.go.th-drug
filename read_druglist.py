@@ -637,19 +637,18 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
                         
                             ):
 
-                                    row = group.iloc[0]
+                                row = group.iloc[0]
 
-                                    dosage_list = (
-                                    group["dosage"]
-                                        .dropna()
-                                        .astype(str)
-                                        .unique()
-                                        .tolist()
-                                     )
+                                dosage_list = (
+                                group["dosage"]
+                                    .dropna()
+                                    .astype(str)
+                                    .unique()
+                                    .tolist()
+                                )
 
-                                     dosage_text = " • ".join(dosage_list)
-
-                                     render_card(row, dosage_text)
+                                dosage_text = " • ".join(dosage_list)
+                                render_card(row, dosage_text)
 
 # ======================================================
 # FOOTER
