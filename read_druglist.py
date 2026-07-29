@@ -565,10 +565,10 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
 
             m = re.match(r"^(\d+)", text)
 
-           if m:
+            if m:
                return int(m.group(1))
 
-           return 9999
+            return 9999
 
 
         df_show["sort1"] = df_show["subtype1_name"].apply(sort_number)
