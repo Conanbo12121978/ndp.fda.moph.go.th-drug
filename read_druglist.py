@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from natsort import index_natsorted
 from io import BytesIO
 import base64
 
@@ -562,7 +563,12 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
         # subtype1
         # =================================================
 
-        for subtype1, g1 in df_show.groupby("subtype1_name", dropna=False):
+        for subtype1 in sorted(
+            df_show["subtype1_name"].unique(),
+            key=natural_key
+        ):
+
+            g1 = df_show[df_show["subtype1_name"] == subtype1]
 
             st.markdown(
                 f"""
