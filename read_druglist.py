@@ -324,7 +324,7 @@ defaults = {
     "account":"--ทั้งหมด--",
     "account_sub":"--ทั้งหมด--",
     "search":"",
-    "view_mode":"📋 รายการยา"
+    "view_mode":"🗂 จัดตามหมวดหมู่"
 }
 
 for k,v in defaults.items():
