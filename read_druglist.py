@@ -558,7 +558,7 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
 
         df_show = df_show.sort_values(by=cols)
 
-        import re
+import re
 
 def sort_number(text):
     text = str(text).strip()
