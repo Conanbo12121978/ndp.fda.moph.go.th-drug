@@ -556,7 +556,6 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
                     .astype(str)
                 )
 
-        df_show = df_show.sort_values(by=cols)
 
         import re
 
@@ -566,7 +565,7 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
             m = re.match(r"^(\d+)", text)
 
             if m:
-               return int(m.group(1))
+                return int(m.group(1))
 
             return 9999
 
