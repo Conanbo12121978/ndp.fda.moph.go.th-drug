@@ -21,6 +21,8 @@ st.set_page_config(
 @st.cache_data
 def load_data():
 
+    natural_key = natsort_keygen()
+
     df = pd.read_excel("media.xlsx")
 
     df = df.rename(columns={
