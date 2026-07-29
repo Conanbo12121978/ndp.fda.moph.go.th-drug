@@ -558,37 +558,37 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
 
         df_show = df_show.sort_values(by=cols)
 
-import re
+        import re
 
-def sort_number(text):
-    text = str(text).strip()
+        def sort_number(text):
+            text = str(text).strip()
 
-    m = re.match(r"^(\d+)", text)
+            m = re.match(r"^(\d+)", text)
 
-    if m:
-        return int(m.group(1))
+           if m:
+               return int(m.group(1))
 
-    return 9999
+           return 9999
 
 
-df_show["sort1"] = df_show["subtype1_name"].apply(sort_number)
-df_show["sort2"] = df_show["subtype2_name"].apply(sort_number)
-df_show["sort3"] = df_show["subtype3_name"].apply(sort_number)
-df_show["sort4"] = df_show["subtype4_name"].apply(sort_number)
+        df_show["sort1"] = df_show["subtype1_name"].apply(sort_number)
+        df_show["sort2"] = df_show["subtype2_name"].apply(sort_number)
+        df_show["sort3"] = df_show["subtype3_name"].apply(sort_number)
+        df_show["sort4"] = df_show["subtype4_name"].apply(sort_number)
 
-df_show = df_show.sort_values(
-    by=[
-        "sort1",
-        "sort2",
-        "sort3",
-        "sort4",
-        "subtype1_name",
-        "subtype2_name",
-        "subtype3_name",
-        "subtype4_name",
-        "drug_name"
-    ]
-)
+        df_show = df_show.sort_values(
+            by=[
+                "sort1",
+                "sort2",
+                "sort3",
+                "sort4",
+                "subtype1_name",
+                "subtype2_name",
+                "subtype3_name",
+                "subtype4_name",
+                "drug_name"
+            ]
+        )
 
         # =================================================
         # subtype1
