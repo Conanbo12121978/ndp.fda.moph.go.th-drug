@@ -97,23 +97,23 @@ def sort_number(text):
 
 def sub_account_style(sub):
 
-    sub = str(sub).strip()
+    sub = str(sub).strip().upper()
 
     styles = {
 
-        "b": {
+        "B": {
             "border": "#2563eb",
             "bg": "#DBEAFE",
             "text": "#1D4ED8"
         },
 
-        "s": {
+        "S": {
             "border": "#16A34A",
             "bg": "#DCFCE7",
             "text": "#15803D"
         },
 
-        "ex": {
+        "EX": {
             "border": "#F59E0B",
             "bg": "#FEF3C7",
             "text": "#B45309"
@@ -201,7 +201,7 @@ display:inline-block;
 
 def render_card(row, dosage_text=""):
 
-    sub = str(row.get("account_sub", ""))
+    sub = str(row.get("account_sub", "")).strip()
 
     style = sub_account_style(sub)
 
