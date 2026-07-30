@@ -535,6 +535,12 @@ st.markdown("""
 
 }
 
+[data-theme="dark"] .new-account{
+
+    filter:brightness(.85);
+
+}
+
 [data-theme="dark"] .drug-name{
 
     color:#ffffff;
@@ -560,7 +566,7 @@ st.markdown("""
 # HEADER
 # =====================================================
 
-st.title("💊 Drug Finder")
+st.title("💊 บัญชียาหลักแห่งชาติ พ.ศ. 2569 ลงวันที่ 12 กุมภาพันธ์ 2569")
 
 st.caption("ค้นหารายการยาและจัดเรียงตามหมวดหมู่")
 
