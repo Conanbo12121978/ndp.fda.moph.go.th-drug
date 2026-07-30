@@ -101,19 +101,19 @@ def sub_account_style(sub):
 
     styles = {
 
-        "B": {
+        "b": {
             "border": "#2563eb",
             "bg": "#DBEAFE",
             "text": "#1D4ED8"
         },
 
-        "S": {
+        "s": {
             "border": "#16A34A",
             "bg": "#DCFCE7",
             "text": "#15803D"
         },
 
-        "EX": {
+        "ex": {
             "border": "#F59E0B",
             "bg": "#FEF3C7",
             "text": "#B45309"
