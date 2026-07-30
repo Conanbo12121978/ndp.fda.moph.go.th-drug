@@ -233,7 +233,7 @@ style="border-left:8px solid {style['border']};">
         background:{style['bg']};
         ">
 
-            📑 บัญชีใหม่ :
+            บัญชีใหม่ :
 
             <span
             class="sub-code"
@@ -264,7 +264,7 @@ style="border-left:8px solid {style['border']};">
 
 <div class="drug-detail">
 
-💉 {dosage_text}
+💡 {dosage_text}
 
 </div>
 
