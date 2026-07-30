@@ -232,6 +232,7 @@ style="border-left:8px solid {style['border']};">
         style="
         background:{style['bg']};
         border-color:{style['border']};
+        color:{style['text']} !important;
         ">
 
             บัญชีใหม่ :
@@ -537,7 +538,7 @@ st.markdown("""
 
 [data-theme="dark"] .new-account{
 
-    filter:brightness(.85);
+    color:inherit !important;
 
 }
 
