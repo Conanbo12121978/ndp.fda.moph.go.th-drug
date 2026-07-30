@@ -97,7 +97,7 @@ def sort_number(text):
 
 def sub_account_style(sub):
 
-    sub = str(sub).strip().upper()
+    sub = str(sub).strip()
 
     styles = {
 
@@ -201,7 +201,7 @@ display:inline-block;
 
 def render_card(row, dosage_text=""):
 
-    sub = str(row.get("account_sub", "")).upper()
+    sub = str(row.get("account_sub", ""))
 
     style = sub_account_style(sub)
 
