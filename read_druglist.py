@@ -198,10 +198,13 @@ display:inline-block;
 # =====================================================
 # DRUG CARD
 # =====================================================
+# =====================================================
+# DRUG CARD
+# =====================================================
 
 def render_card(row, dosage_text=""):
 
-    sub = str(row.get("account_sub", ""))
+    sub = str(row.get("account_sub", "")).upper()
 
     style = sub_account_style(sub)
 
@@ -224,7 +227,14 @@ style="border-left:8px solid {style['border']};">
 
     </div>
 
-    
+    <div class="drug-account">
+
+        <span
+        class="new-account"
+
+        style="
+        background:{style['bg']};
+        ">
 
             📑 บัญชีใหม่ :
 
@@ -321,7 +331,6 @@ style="border-left:8px solid {style['border']};">
         html,
         unsafe_allow_html=True
     )
-
 # ====================================================
 # CSS
 # ====================================================
