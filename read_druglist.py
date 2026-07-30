@@ -325,10 +325,7 @@ style="border-left:8px solid {style['border']};">
 
 """
 
-    st.markdown(
-        html,
-        unsafe_allow_html=True
-    )
+  st.html(html)
 # ====================================================
 # CSS
 # ====================================================
