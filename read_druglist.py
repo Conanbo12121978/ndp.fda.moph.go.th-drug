@@ -198,13 +198,10 @@ display:inline-block;
 # =====================================================
 # DRUG CARD
 # =====================================================
-# =====================================================
-# DRUG CARD
-# =====================================================
 
 def render_card(row, dosage_text=""):
 
-    sub = str(row.get("account_sub", "")).upper()
+    sub = str(row.get("account_sub", ""))
 
     style = sub_account_style(sub)
 
