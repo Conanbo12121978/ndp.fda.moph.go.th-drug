@@ -224,14 +224,7 @@ style="border-left:8px solid {style['border']};">
 
     </div>
 
-    <div class="drug-account">
-
-        <span
-        class="new-account"
-
-        style="
-        background:{style['bg']};
-        ">
+    
 
             📑 บัญชีใหม่ :
 
