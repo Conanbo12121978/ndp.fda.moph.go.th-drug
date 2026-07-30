@@ -231,6 +231,7 @@ style="border-left:8px solid {style['border']};">
 
         style="
         background:{style['bg']};
+        border-color:{style['border']};
         ">
 
             บัญชีใหม่ :
@@ -462,6 +463,8 @@ st.markdown("""
     font-size:14px;
 
     font-weight:700;
+
+    border:1px solid currentColor;
 
 }
 
