@@ -220,7 +220,7 @@ style="border-left:8px solid {style['border']};">
 
     <div class="drug-name">
 
-        💊 {drug_name}
+        {drug_name}
 
     </div>
 
@@ -771,12 +771,13 @@ if view_mode == "📋 รายการยา":
         # รวม dosage
         # ==========================
 
-        for (drug_name, account_sub), group in df_show.groupby(
+        for (drug_name, account_sub, account_drug_ID), group in df_show.groupby(
 
             [
 
                 "drug_name",
-                "account_sub"
+                "account_sub",
+                "account_drug_ID" 
 
             ],
 
@@ -980,14 +981,16 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
                         for (
 
                             drug_name,
-                            account_sub
+                            account_sub,
+                            account_drug_ID
 
                         ), group in g4.groupby(
 
                             [
 
                                 "drug_name",
-                                "account_sub"
+                                "account_sub",
+                                "account_drug_ID"
 
                             ],
 
