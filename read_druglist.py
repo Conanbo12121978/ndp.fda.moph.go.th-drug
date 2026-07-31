@@ -577,10 +577,25 @@ st.divider()
 # SEARCH
 # =====================================================
 
-search = st.text_input(
-    "🔍 ค้นหาชื่อยา",
-    placeholder="พิมพ์ชื่อยา..."
-).strip()
+col_search, col_clear = st.columns([8, 1])
+
+with col_search:
+
+    search = st.text_input(
+        "🔍 ค้นหาชื่อยา",
+        placeholder="พิมพ์ชื่อยา...",
+        key="search_box"
+    ).strip()
+
+with col_clear:
+
+    st.write("")
+
+    if st.button("✕", key="clear_search"):
+
+        st.session_state["search_box"] = ""
+
+        st.rerun()
 
 # =====================================================
 # VIEW MODE
