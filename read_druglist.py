@@ -591,7 +591,10 @@ with col_search:
 
 with col_clear:
 
-    st.write("")
+    st.markdown(
+        "<div style='height:28px'></div>",
+        unsafe_allow_html=True
+    )
 
     st.button(
         "✕",
