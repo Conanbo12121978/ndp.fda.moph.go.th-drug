@@ -571,11 +571,13 @@ st.title("💊 บัญชียาหลักแห่งชาติ พ.ศ
 
 st.caption("ค้นหารายการยาและจัดเรียงตามหมวดหมู่")
 
-st.divider()
-
 # =====================================================
 # SEARCH
 # =====================================================
+
+def clear_search():
+    st.session_state["search_box"] = ""
+
 
 col_search, col_clear = st.columns([9, 1])
 
@@ -584,24 +586,19 @@ with col_search:
     search = st.text_input(
         "🔍 ค้นหาชื่อยา",
         placeholder="พิมพ์ชื่อยา...",
-        key="search_box",
-        label_visibility="visible"
+        key="search_box"
     ).strip()
-
 
 with col_clear:
 
     st.write("")
 
-    if st.button(
+    st.button(
         "✕",
         key="clear_search",
-        help="ล้างคำค้นหา"
-    ):
-
-        st.session_state["search_box"] = ""
-
-        st.rerun()
+        help="ล้างคำค้นหา",
+        on_click=clear_search
+    )
 
 
 # =====================================================
