@@ -84,12 +84,12 @@ def sort_number(text):
 
     text = str(text).strip()
 
-    m = re.match(r"^(\d+)", text)
+    nums = re.findall(r"\d+", text)
 
-    if m:
-        return int(m.group(1))
+    if nums:
+        return tuple(int(x) for x in nums)
 
-    return 9999
+    return (9999,)
 
 # =====================================================
 # SUB ACCOUNT STYLE
@@ -948,7 +948,8 @@ elif view_mode == "🗂 จัดตามหมวดหมู่":
         df_show["sort2"] = df_show["subtype2_name"].apply(sort_number)
         df_show["sort3"] = df_show["subtype3_name"].apply(sort_number)
         df_show["sort4"] = df_show["subtype4_name"].apply(sort_number)
-
+        df_show["sort0"] = df_show["subtype1_name"].apply(sort_number)
+        
         df_show = df_show.sort_values(
 
             by=[
